@@ -1,0 +1,80 @@
+Introduction
+This hands-on lab will introduce you to Azure Cloud Shell, a web-based virtual terminal that allows you full access to Azure PowerShell and the CLI — right from your browser. There's nothing to install and no plugins — just scripting goodness. We'll take a look at how to set up Cloud Shell and run a few commands in both the Azure CLI and Azure PowerShell. When we're finished, you'll have the knowledge necessary to run Cloud Shell in your own Azure subscription. Our key objective include configuring the Azure Cloud Shell, running sample commands in Azure CLI (PowerShell Environment), creating a Linux virtual machine using the Azure CLI (PowerShell Environment), viewing Azure resources in Azure PowerShell, and removing a Linux virtual machine using Azure PowerShell.
+
+Solution
+Log in to the Azure portal using the credentials provided on the lab instructions page.
+
+Configure Cloud Shell
+In the Azure portal, click the Cloud Shell icon (>_) in the top-right navigation search bar.
+In the Cloud Shell welcome menu, click PowerShell.
+In the storage menu, click Show advanced settings.
+For the Cloud Shell region, select Central US.
+For the Storage account, enter a new and unique name.
+For the File Share, enter a new and unique name.
+Click Create storage.
+Execute Azure CLI Commands in the Cloud Shell
+In Cloud Shell, list the resource groups available in your Azure subscription:
+
+======>> az group list
+From the output, locate the line that begins with "name":, and copy everything inside the quotation marks. This will be pasted later to replace <RG_NAME>.
+
+List the storage accounts available in your Azure subscription:
+
+======>> az storage account list
+List the virtual machines available in your Azure subscription:
+
+======>>  az vm list
+Note: You will receive a blank array here since there are no VMs created yet.
+
+Create a Virtual Machine Using the Azure CLI
+Type the following command line-by-line, replacing <RG_NAME> with the previously copied name of your lab resource group:
+
+
+
+az vm create `
+--resource-group "<RG_NAME>" `
+--name LabVM `
+--image debian `
+--size Standard_B1ms `
+--admin-username azureuser `
+--generate-ssh-keys `
+--public-ip-sku Standard
+
+
+
+Note: The backticks used after the command will move the cursor to the next line.
+
+Run PowerShell Cmdlets in the Cloud Shell
+List the resource groups available in our Azure subscription:
+
+======>>  Get-AzResourceGroup
+List the storage accounts available in our Azure subscription:
+
+=====>>  Get-AzStorageAccount
+List all the virtual machines that now exist in the lab:
+
+======>> Get-AzVM
+List all the resources that now exist in the lab:
+
+=======>>>>  Get-AzResource | ft
+Clear the screen:
+
+clear
+Remove the Virtual Machine
+Run the following command, replacing <RG_NAME> with the name of your resource group:
+
+=======>>>  Remove-AzVM -Name LabVM -ResourceGroupName <RESOURCE_GROUP_NAME>
+Note: You can get this by pressing Tab to auto-fill the name into the command.
+
+At the prompt, enter Y. It may take several minutes to be deleted.
+
+Verify that the virtual machine has been deleted:
+
+=====>> Get-AzVM
+Log out:
+
+exit
+Click Quit to close Cloud Shell and return to the Azure portal.
+
+Conclusion
+
