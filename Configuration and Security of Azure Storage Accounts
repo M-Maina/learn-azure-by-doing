@@ -1,0 +1,280 @@
+Introduction
+This hands-on lab provides some experience with configuring and securing an Azure storage account. We log in to the Azure portal and create a storage account, and then get familiar with the configuration options for it, including replication options, access tiers, and secure transfers. We RDP into a Windows VM and use Microsoft Azure Storage Explorer to connect to the storage account. We use Blob storage and attempt to upload and retrieve data from the blob. Using the Azure portal, we use access policies and shared access signatures to both permit access to the storage account and deny access to blob data.
+
+Solution
+Log in to the Azure portal using the credentials provided on the lab page.
+
+Note: To complete this lab, you will need to use a remote desktop client.
+
+Windows: Microsoft Remote Desktop on Windows 10
+MacOS: Microsoft Remote Desktop
+Linux: Remmina
+Create and Configure a Storage Account
+In the Azure portal, click Create.
+In the search bar, type and select Storage account.
+Click Create.
+In Storage account name, enter a globally unique name (e.g., acgstorage2).
+In Redundancy, select Locally-redundant storage (LRS).
+Leave the rest as their defaults and click Next: Advanced.
+Click Review + create.
+Click Create.
+Click Go to resource and review the storage account configuration details.
+Log In to the VM with RDP
+Navigate back to the resource group.
+Select the provisioned virtual machine.
+Beneath Essentials, copy the public IP address.
+Open the remote desktop client and add a connection. On Remote Desktop for Mac, click the + icon at the top and click Add PC.
+Paste in the public IP address of the virtual machine, assign it a name (e.g., lab-VM), and click Add.
+Connect to the virtual machine using the credentials provided for Lab-VM on the lab page.
+Click Continue on the certificate warning dialog stating This certificate couldn't be verified back to a root certificate.
+Open Azure Storage Explorer, Connect to the Azure Account, and Upload Image Files
+Once connected, double-click Microsoft Azure Storage Explorer to launch the app.
+In the Connect to Azure Storage wizard, select Subscription to connect using Azure Active Directory.
+Click Next.
+Log in to the Azure portal using the credentials provided on the lab page.
+On the left under Account Management, click Open Explorer.
+Click Real Hands-On Labs to expand subscription options.
+Beneath Storage Accounts, expand the storage account name, and then expand Blob Containers.
+Right-click Blob Containers and select Create Blob Container.
+Type the name "images" and select the images container.
+Within the images container, click Upload > Upload Files.
+Under Selected files, click the ellipsis icon to the right to browse for files.
+In the Choose files to upload dialog, click This PC > Windows (C:) > images.
+Select several images and click Open.
+Click Upload.
+Enable Security on the Storage Account Using the Various Methods Available
+Identify the Storage Account Access Keys in the Azure Portal
+In the Azure portal, navigate back to the resource group.
+Select the storage account.
+On the left menu under Security + networking, select Access keys.
+At the top, click Show keys.
+Copy the key1 access key to the clipboard.
+Upload and Download Storage Account Files in Azure Storage Explorer Using Access Keys
+Return to the virtual machine.
+Within Azure Storage Explorer, on the left menu, click the electrical socket icon to connect to the storage account.
+In the Connect to Azure Storage wizard, select Storage account or service.
+Select Account name and key.
+Click Next.
+In Display name, enter "acgstorage2-key".
+In Account name, enter the storage account name (e.g., acgstorage2).
+Paste in the storage account access key previously copied.
+Click Next.
+Click Connect.
+On the left menu, click acgstorage2-key > Blob Containers > images.
+Click Upload > Upload Files.
+Within the images container, click Upload > Upload Files.
+Under Selected files, click the ellipsis icon to the right to browse for files.
+In the Choose files to upload dialog, click This PC > Windows (C:) > images.
+Select several images and click Open.
+Click Upload.
+Select several files and click Download.
+Select the Downloads folder and click Select Folder.
+Revoke Storage Account Access by Rotating Access Keys
+Return to the Azure portal.
+
+On the storage accounts Access keys page under key1, click Rotate key.
+
+On the Regenerate access key dialog, click Yes.
+
+Return to Azure Storage Explorer.
+
+Right-click the storage account name (e.g., acgstorage2) and select Refresh.
+
+Beneath the storage account name, click Blob Containers.
+
+An Error Details dialog opens indicating that access to the storage account is now denied.
+
+Provide More Granular Permissions Using a Shared Access Signature (SAS)
+Return to the Azure portal.
+
+On the storage account's Access keys page, under Security + networking, select Shared access signature.
+
+Under Allowed services, leave only Blob selected.
+
+Under Allowed resource types, select Service.
+
+Under Allowed permissions, leave only Read and List selected.
+
+Leave the rest as their defaults and click Generate SAS and connection string.
+
+Copy the SAS token and Blob service SAS URL for later use.
+
+Return to the virtual machine.
+
+In Azure Storage Explorer, click the electrical socket icon to connect to the storage account.
+
+Select Storage account or service.
+
+Select Share access signature URL (SAS).
+
+Click Next.
+
+Paste in the service URL.
+
+In Display name, enter "acgstorage2-SAS".
+
+Click Next.
+
+Click Connect.
+
+On the left menu, click acgstorage2-SAS > Blob Containers.
+
+An Error Details page now opens. You are receiving this error because access was not allowed to the container or objects contained within.
+
+Create a Second SAS with Container Access Permissions
+Return to the Azure portal.
+
+On the storage account's Shared access signature page under Allowed resource types, select Container and Object.
+
+Click Generate SAS and connection string.
+
+Copy the Blob service SAS URL.
+
+Return to the virtual machine.
+
+In Azure Storage Explorer, click the electrical socket icon to connect to the storage account.
+
+Select Storage account or service.
+
+Select Share access signature URL (SAS).
+
+Click Next.
+
+Paste in the service URL.
+
+In Display name, enter "acgstorage2-SAS2".
+
+Click Next.
+
+Click Connect.
+
+On the left menu, click acgstorage2-SAS2 > Blob Containers > images
+
+Click Upload > Upload Files.
+
+Under Selected files, click the ellipsis icon.
+
+In the Choose files to upload dialog, click This PC > Windows (C:) > images.
+
+Select an image and click Open.
+
+Click Upload.
+
+You should receive an error message: Failed to start transfer: Insufficient credentials.
+
+Create a Third SAS with Container Write, Add, and Create Permissions
+Return to the Azure portal.
+
+On the storage account's Shared access signature page under Allowed permissions, select Write, Add, and Create.
+
+Click Generate SAS and connection string.
+
+Copy the Blob service SAS URL.
+
+Return to Azure Storage Explorer and click the connect icon again.
+
+Select Storage account or service.
+
+Select Share access signature URL (SAS).
+
+Click Next.
+
+Paste in the service URL.
+
+In Display name, enter "acgstorage2-SAS3".
+
+Click Next.
+
+Click Connect.
+
+On the left menu, click acgstorage2-SAS3 > Blob Containers > images
+
+Click Upload > Upload Files.
+
+Under Selected files, click the ellipsis icon.
+
+In the Choose files to upload dialog, click This PC > Windows (C:) > images.
+
+Select an image and click Open.
+
+Click Upload.
+
+You should receive a success message that the file successfully uploaded to the container.
+
+Revoke Access for the Three Shared Access Signatures
+Return to the Azure portal.
+
+From the storage account's Shared access signature page, select Access keys.
+
+Under key1, click Rotate key.
+
+On the Regenerate access key dialog, click Yes.
+
+Return to Azure Storage Explorer.
+
+Right-click on each of the three shared access signatures and click Refresh.
+
+Click Blob Containers on any of the shared access signatures.
+
+An Error Details page now opens. You are receiving this error because access was revoked for all shared access signatures.
+
+Provide More Granular Revoke Access Permissions to SAS Using a Stored Access Policy (SAP)
+Create a SAP and Attach It to the SAS of the images Folder
+Return to the Azure portal.
+From the storage account page under Data storage, select Containers.
+Select images.
+On the left under Settings, select Access policy.
+Click + Add policy.
+In Identifier, enter "Test-SAP".
+In Permissions, select all the available permissions.
+Set the Start time to yesterday's date and Expiry time to tomorrow's date.
+Click OK.
+Click Save.
+Navigate back to the storage account page.
+Select Shared access signature and note the message that stored access policies are currently not supported for an account-level SAS.
+Return to Azure Storage Explorer.
+Select P2-Real Hands-On Labs > Storage Accounts > <STORAGE_ACCOUNT> > Blob Containers > images.
+Right-click images and select Get Shared Access Signature.
+In Access policy, select Test-SAP.
+Click Create.
+Beside URL, click Copy.
+Click Close.
+Click the electrical socket icon to connect to the storage account.
+Select Blob container.
+Select Share access signature URL (SAS).
+Click Next.
+Paste in the Blob container SAS URL.
+In Display name, enter "images-SAS".
+Click Next.
+Click Connect.
+Verify SAP Configuration
+Click Upload > Upload Files.
+Under Selected files, click the ellipsis icon.
+In the Choose files to upload dialog, click This PC > Windows (C:) > images.
+Select an image and click Open.
+Click Upload.
+In the Storage Access Policy Detected dialog, click OK.
+Select a file and click Delete.
+To confirm, click Yes.
+Revoke Access by Deleting the SAP
+Return to the Azure portal.
+
+Under Data storage, select Containers.
+
+Select images.
+
+Under Settings, select Access policy.
+
+Under Permissions on the right, click the ellipsis and select Delete.
+
+Click Save.
+
+Return to Azure Storage Explorer.
+
+Close Storage Explorer and relaunch the app.
+
+On the left, select Storage Accounts > (Attached Containers) > Blob Containers > images-SAS (SAS).
+
+You should receive a message stating the server failed to authenticate the request. Access has been denied.
+
+Conclusion
